@@ -11,7 +11,8 @@ public class DiceProbabilityCalculator {
             System.out.println("\n=== Cresting Lilypads - Dice Probability Calculator ===");
             System.out.println("1. Uncontested Roll");
             System.out.println("2. Clash Roll");
-            System.out.println("3. Exit");
+            System.out.println("3. More, Less or Equal comparison");
+            System.out.println("4. Exit");
             System.out.print("Select mode: ");
 
             int mode = scanner.nextInt();
@@ -24,6 +25,9 @@ public class DiceProbabilityCalculator {
                     clashMode(scanner);
                     break;
                 case 3:
+                    moreLessEqual(scanner);
+                    break;
+                case 4:
                     System.out.println("Exiting program.");
                     scanner.close();
                     return;
@@ -103,7 +107,7 @@ public class DiceProbabilityCalculator {
 
         System.out.println("\n\nYour dice: " + playerDice);
         System.out.println("==============================================");
-        System.out.println("Enemy Dice\tWin Chance\tCrit Win Chance");
+        System.out.println("Enemy Dice |\tWin Chance |\tCrit Win Chance");
         System.out.println("==============================================");
 
         for (int enemyDice = enemyStart; enemyDice <= enemyEnd; enemyDice++) {
@@ -140,7 +144,7 @@ public class DiceProbabilityCalculator {
             }
 
             System.out.printf(
-                    "%d dice\t\t%.2f%%\t\t%.2f%%%n",
+                    "%d dice |\t\t%.2f%% |\t\t%.2f%%%n",
                     enemyDice,
                     winChance * 100,
                     critChance * 100
@@ -148,6 +152,59 @@ public class DiceProbabilityCalculator {
         }
 
         System.out.println("==============================================");
+    }
+
+    private static void moreLessEqual(Scanner scanner) {
+        System.out.print("\nEnter number of dice: ");
+        int diceCount = scanner.nextInt();
+
+        if (diceCount <= 0) {
+            System.out.println("Invalid dice.");
+            return;
+        }
+
+        System.out.print("\nEnter number of successes: ");
+        int successCount = scanner.nextInt();
+
+        if (successCount < 0 || successCount > diceCount) {
+            System.out.println("Invalid number of successes.");
+            return;
+        }
+
+        double comparisonChance = 0.0;
+
+        System.out.println("Choose comparison type:");
+        System.out.println("1. More of equal");
+        System.out.println("2. Less of equal");
+        System.out.println("3. Equal");
+        System.out.print("Select type: ");
+        int comparisonType = scanner.nextInt();
+
+        String output = "\n=== " + diceCount + " dice have ";
+        switch (comparisonType) {
+            case 1:
+                for (int successes = successCount; successes <= diceCount; successes++) {
+                    comparisonChance += binomialProbability(diceCount, successes);
+                }
+                output += "More or Equal ";
+                break;
+            case 2:
+                for (int successes = 0; successes <= successCount; successes++) {
+                    comparisonChance += binomialProbability(diceCount, successes);
+                }
+                output += "Less or Equal ";
+                break;
+            case 3:
+                comparisonChance = binomialProbability(diceCount, successCount);
+                output += "Exactly ";
+                break;
+            default:
+                System.out.println("Invalid comparison type.");
+                return;
+        }
+
+        System.out.println(output + successCount + " successes ===");
+        System.out.printf("Comparison Chance: %.2f%%%n", comparisonChance * 100);
     }
 
 
