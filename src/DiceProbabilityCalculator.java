@@ -230,7 +230,6 @@ public class DiceProbabilityCalculator {
 
         int maxSum = diceCount * 10;
 
-        // dp[sum] = probability of achieving this sum
         double[] dp = new double[maxSum + 1];
         dp[0] = 1.0;
 
