@@ -12,7 +12,8 @@ public class DiceProbabilityCalculator {
             System.out.println("1. Uncontested Roll");
             System.out.println("2. Clash Roll");
             System.out.println("3. More, Less or Equal comparison");
-            System.out.println("4. Exit");
+            System.out.println("4. Total percentile");
+            System.out.println("5. Exit");
             System.out.print("Select mode: ");
 
             int mode = scanner.nextInt();
@@ -28,6 +29,9 @@ public class DiceProbabilityCalculator {
                     moreLessEqual(scanner);
                     break;
                 case 4:
+                    totalPercentile(scanner);
+                    break;
+                case 5:
                     System.out.println("Exiting program.");
                     scanner.close();
                     return;
@@ -100,7 +104,7 @@ public class DiceProbabilityCalculator {
         System.out.print("Enter enemy dice count OR range end (same number for single): ");
         int enemyEnd = scanner.nextInt();
 
-        if (enemyEnd < enemyStart || enemyEnd <= 0 || enemyStart <= 0) {
+        if (enemyEnd < enemyStart || enemyEnd < 0 || enemyStart < 0) {
             System.out.println("Invalid range.");
             return;
         }
@@ -205,6 +209,57 @@ public class DiceProbabilityCalculator {
 
         System.out.println(output + successCount + " successes ===");
         System.out.printf("Comparison Chance: %.2f%%%n", comparisonChance * 100);
+    }
+
+    private static void totalPercentile(Scanner scanner) {
+        System.out.print("\nEnter number of dice: ");
+        int diceCount = scanner.nextInt();
+
+        if (diceCount <= 0) {
+            System.out.println("Invalid dice.");
+            return;
+        }
+
+        System.out.print("\nEnter target total: ");
+        int target = scanner.nextInt();
+
+        if (target < diceCount || target > diceCount * 10) {
+            System.out.println("Invalid target total.");
+            return;
+        }
+
+        int maxSum = diceCount * 10;
+
+        // dp[sum] = probability of achieving this sum
+        double[] dp = new double[maxSum + 1];
+        dp[0] = 1.0;
+
+        for (int dice = 1; dice <= diceCount; dice++) {
+
+            double[] next = new double[maxSum + 1];
+
+            for (int sum = 0; sum <= maxSum; sum++) {
+
+                if (dp[sum] == 0.0) {
+                    continue;
+                }
+
+                for (int roll = 1; roll <= 10; roll++) {
+                    next[sum + roll] += dp[sum] / 10.0;
+                }
+            }
+
+            dp = next;
+        }
+
+        double percentile = 0.0;
+
+        for (int sum = diceCount; sum <= target; sum++) {
+            percentile += dp[sum];
+        }
+
+        System.out.println("\n=== " + diceCount + " dice | " + target + " target total ===");
+        System.out.printf("Percentile: %.2f%%%n", percentile * 100);
     }
 
 
