@@ -13,7 +13,8 @@ public class DiceProbabilityCalculator {
             System.out.println("2. Clash Roll");
             System.out.println("3. More, Less or Equal comparison");
             System.out.println("4. Total percentile");
-            System.out.println("5. Exit");
+            System.out.println("5. Success Distribution");
+            System.out.println("6. Exit");
             System.out.print("Select mode: ");
 
             int mode = scanner.nextInt();
@@ -32,6 +33,9 @@ public class DiceProbabilityCalculator {
                     totalPercentile(scanner);
                     break;
                 case 5:
+                    successDistribution(scanner);
+                    break;
+                case 6:
                     System.out.println("Exiting program.");
                     scanner.close();
                     return;
@@ -110,6 +114,12 @@ public class DiceProbabilityCalculator {
         }
 
         System.out.println("\n\nYour dice: " + playerDice);
+        if (defensive) {
+            System.out.println("Defensive");
+        }
+        else {
+            System.out.println("Offensive");
+        }
         System.out.println("==============================================");
         System.out.println("Enemy Dice |\tWin Chance |\tCrit Win Chance");
         System.out.println("==============================================");
@@ -259,6 +269,28 @@ public class DiceProbabilityCalculator {
 
         System.out.println("\n=== " + diceCount + " dice | " + target + " target total ===");
         System.out.printf("Percentile: %.2f%%%n", percentile * 100);
+    }
+
+    private static void successDistribution(Scanner scanner) {
+
+        System.out.print("\nEnter number of dice: ");
+        int diceCount = scanner.nextInt();
+
+        if (diceCount <= 0) {
+            System.out.println("Invalid dice.");
+            return;
+        }
+        System.out.println("\n\nYour dice: " + diceCount);
+        System.out.println("Successes\tChance");
+
+        for (int successes = 0; successes <= diceCount; successes++) {
+
+            double probability = binomialProbability(diceCount, successes);
+
+            System.out.printf("%2d\t\t%.4f%%%n",
+                    successes,
+                    probability * 100);
+        }
     }
 
 
