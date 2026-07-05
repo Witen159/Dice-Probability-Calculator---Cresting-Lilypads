@@ -59,11 +59,7 @@ class ComparisonCalculator extends Calculator {
         );
 
         results.innerHTML = `
-        <b>Chance</b>
-
-        <br><br>
-
-        ${(chance * 100).toFixed(2)}%
+        <b>Chance: ${(chance * 100).toFixed(2)}%</b>
     `;
 
     }

@@ -77,7 +77,7 @@ class ClashCalculator extends Calculator {
         });
 
         html += ` 
-            </div>
+        </div>
         </div>
         <div id="clashTable"></div>
         `;

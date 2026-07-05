@@ -23,14 +23,8 @@ class ProbabilityCalculator extends Calculator {
         const expression = text("expression");
 
         results.innerHTML = `
-        Expression entered:
-
+        Expression entered: <code>${expression}</code>
         <br><br>
-
-        <code>${expression}</code>
-
-        <br><br>
-
         You'll have to wait until I can rewrite everything for JS...
     `;
 
