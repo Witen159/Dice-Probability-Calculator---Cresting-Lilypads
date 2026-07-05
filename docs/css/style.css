@@ -230,3 +230,72 @@ footer a:hover {
     text-decoration: underline;
 
 }
+
+.dice-tabs {
+
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+}
+
+.dice-tab {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 34px;
+    height: 30px;
+
+    padding: 0 10px;
+
+    border: 1px solid #555;
+    border-radius: 5px;
+
+    background: #404040;
+
+    color: white;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.dice-tab.active {
+
+    background: #3d7eff;
+
+    border-color: #3d7eff;
+}
+
+.dice-tab:hover {
+
+    background: #555;
+
+}
+
+.dice-tabs-header {
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+}
+
+.dice-tabs-container {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+}

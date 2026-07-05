@@ -1,3 +1,5 @@
+let currentClashData = [];
+
 class ClashCalculator extends Calculator {
 
     constructor() {
@@ -43,7 +45,7 @@ class ClashCalculator extends Calculator {
         const defensive =
             select("clashMode") === "defensive";
 
-        const answer = calculateClash(
+        currentClashData = calculateClash(
             playerMin,
             playerMax,
             enemyMin,
@@ -51,43 +53,86 @@ class ClashCalculator extends Calculator {
             defensive
         );
 
-        let html = "";
+        let html = `
+        <div class="dice-tabs-container">
 
-        answer.forEach(player => {
+            <div class="dice-tabs-header">
+                Your Dice
+            </div>
+
+            <div class="dice-tabs">
+        `;
+        currentClashData.forEach((player, index) => {
 
             html += `
-            <h3>
-                Your Dice: ${player.player}
-                (${defensive ? "Defensive" : "Offensive"})
-            </h3>
+            <button
+                class="dice-tab ${index === 0 ? "active" : ""}"
+                data-index="${index}">
 
-            <table>
+                ${player.player}
 
-                <tr>
-                    <th>Enemy Dice</th>
-                    <th>Win Chance</th>
-                    <th>Crit Chance</th>
-                </tr>
+            </button>
         `;
-
-            player.enemies.forEach(enemy => {
-
-                html += `
-                <tr>
-                    <td>${enemy.enemy}</td>
-                    <td>${(enemy.winChance * 100).toFixed(2)}%</td>
-                    <td>${(enemy.critChance * 100).toFixed(2)}%</td>
-                </tr>
-            `;
-
-            });
-
-            html += "</table><br>";
 
         });
 
+        html += ` 
+            </div>
+        </div>
+        <div id="clashTable"></div>
+        `;
+
         results.innerHTML = html;
 
+        document.querySelectorAll(".dice-tab").forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                document.querySelectorAll(".dice-tab")
+                    .forEach(b => b.classList.remove("active"));
+
+                button.classList.add("active");
+
+                showClashTable(parseInt(button.dataset.index));
+
+            });
+
+        });
+
+        showClashTable(0);
+
     }
+
+}
+
+function showClashTable(index) {
+
+    const player = currentClashData[index];
+
+    let html = `
+        <table>
+
+            <tr>
+                <th>Enemy Dice</th>
+                <th>Win Chance</th>
+                <th>Crit Chance</th>
+            </tr>
+    `;
+
+    player.enemies.forEach(enemy => {
+
+        html += `
+            <tr>
+                <td>${enemy.enemy}</td>
+                <td>${(enemy.winChance * 100).toFixed(2)}%</td>
+                <td>${(enemy.critChance * 100).toFixed(2)}%</td>
+            </tr>
+        `;
+
+    });
+
+    html += `</table>`;
+
+    document.getElementById("clashTable").innerHTML = html;
 
 }

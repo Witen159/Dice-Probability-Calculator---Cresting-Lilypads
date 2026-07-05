@@ -29,8 +29,6 @@ class UncontestedCalculator extends Calculator {
         <b>Win Chance:</b>
         ${(answer.winChance * 100).toFixed(2)}%
 
-        <br><br>
-
         <b>Crit Win Chance:</b>
         ${(answer.critChance * 100).toFixed(2)}%
     `;
