@@ -1,3 +1,7 @@
+import engine.*;
+import model.*;
+import parser.*;
+
 import java.util.Scanner;
 
 public class DiceProbabilityCalculator {
@@ -14,7 +18,8 @@ public class DiceProbabilityCalculator {
             System.out.println("3. More, Less or Equal comparison");
             System.out.println("4. Total percentile");
             System.out.println("5. Success Distribution");
-            System.out.println("6. Exit");
+            System.out.println("6. Probability Calculator");
+            System.out.println("7. Exit");
             System.out.print("Select mode: ");
 
             int mode = scanner.nextInt();
@@ -36,6 +41,9 @@ public class DiceProbabilityCalculator {
                     successDistribution(scanner);
                     break;
                 case 6:
+                    probabilityCalculator(scanner);
+                    break;
+                case 7:
                     System.out.println("Exiting program.");
                     scanner.close();
                     return;
@@ -75,10 +83,13 @@ public class DiceProbabilityCalculator {
     }
 
     private static void clashMode(Scanner scanner) {
-        System.out.print("\nEnter your number of dice: ");
-        int playerDice = scanner.nextInt();
+        System.out.print("\nEnter lower bound of your number of dice: ");
+        int playerDiceMin = scanner.nextInt();
 
-        if (playerDice <= 0) {
+        System.out.print("\nEnter lower bound of your number of dice: ");
+        int playerDiceMax = scanner.nextInt();
+
+        if (playerDiceMin <= 0 || playerDiceMax < playerDiceMin) {
             System.out.println("Invalid dice.");
             return;
         }
@@ -108,64 +119,68 @@ public class DiceProbabilityCalculator {
         System.out.print("Enter enemy dice count OR range end (same number for single): ");
         int enemyEnd = scanner.nextInt();
 
-        if (enemyEnd < enemyStart || enemyEnd < 0 || enemyStart < 0) {
+        if (enemyEnd < enemyStart || enemyStart < 0) {
             System.out.println("Invalid range.");
             return;
         }
 
-        System.out.println("\n\nYour dice: " + playerDice);
-        if (defensive) {
-            System.out.println("Defensive");
-        }
-        else {
-            System.out.println("Offensive");
-        }
-        System.out.println("==============================================");
-        System.out.println("Enemy Dice |\tWin Chance |\tCrit Win Chance");
-        System.out.println("==============================================");
+        for (int dice = playerDiceMin; dice <= playerDiceMax; dice++) {
+            System.out.println("\n\nYour dice: " + dice);
+            if (defensive) {
+                System.out.println("Defensive");
+            }
+            else {
+                System.out.println("Offensive");
+            }
+            System.out.println("==============================================");
+            System.out.println("Enemy Dice |\tWin Chance |\tCrit Win Chance");
+            System.out.println("==============================================");
 
-        for (int enemyDice = enemyStart; enemyDice <= enemyEnd; enemyDice++) {
-            double winChance = 0.0;
-            double critChance = 0.0;
+            for (int enemyDice = enemyStart; enemyDice <= enemyEnd; enemyDice++) {
+                double winChance = 0.0;
+                double critChance = 0.0;
 
-            for (int playerSuccesses = 0; playerSuccesses <= playerDice; playerSuccesses++) {
-                double playerProb = binomialProbability(playerDice, playerSuccesses);
+                for (int playerSuccesses = 0; playerSuccesses <= dice; playerSuccesses++) {
+                    double playerProb = binomialProbability(dice, playerSuccesses);
 
-                for (int enemySuccesses = 0; enemySuccesses <= enemyDice; enemySuccesses++) {
-                    double enemyProb = binomialProbability(enemyDice, enemySuccesses);
+                    for (int enemySuccesses = 0; enemySuccesses <= enemyDice; enemySuccesses++) {
+                        double enemyProb = binomialProbability(enemyDice, enemySuccesses);
 
-                    double combinedProb = playerProb * enemyProb;
+                        double combinedProb = playerProb * enemyProb;
 
-                    boolean win;
-                    if (defensive) {
-                        win = playerSuccesses >= enemySuccesses + 1;
-                    } else {
-                        win = playerSuccesses >= enemySuccesses;
-                    }
+                        boolean win;
+                        if (defensive) {
+                            win = playerSuccesses >= enemySuccesses + 1;
+                        } else {
+                            win = playerSuccesses >= enemySuccesses;
+                        }
 
-                    win = win && playerSuccesses >= 1;
+                        win = win && playerSuccesses >= 1;
 
-                    boolean crit = playerSuccesses >= enemySuccesses + 2;
+                        boolean crit = playerSuccesses >= enemySuccesses + 2;
 
-                    if (win) {
-                        winChance += combinedProb;
-                    }
+                        if (win) {
+                            winChance += combinedProb;
+                        }
 
-                    if (crit) {
-                        critChance += combinedProb;
+                        if (crit) {
+                            critChance += combinedProb;
+                        }
                     }
                 }
+
+                System.out.printf(
+                        "%d dice |\t\t%.2f%% |\t\t%.2f%%%n",
+                        enemyDice,
+                        winChance * 100,
+                        critChance * 100
+                );
             }
 
-            System.out.printf(
-                    "%d dice |\t\t%.2f%% |\t\t%.2f%%%n",
-                    enemyDice,
-                    winChance * 100,
-                    critChance * 100
-            );
+            System.out.println("==============================================");
         }
 
-        System.out.println("==============================================");
+
     }
 
     private static void moreLessEqual(Scanner scanner) {
@@ -218,7 +233,7 @@ public class DiceProbabilityCalculator {
         }
 
         System.out.println(output + successCount + " successes ===");
-        System.out.printf("Comparison Chance: %.2f%%%n", comparisonChance * 100);
+        System.out.printf("Comparator.Comparison Chance: %.2f%%%n", comparisonChance * 100);
     }
 
     private static void totalPercentile(Scanner scanner) {
@@ -293,6 +308,26 @@ public class DiceProbabilityCalculator {
         }
     }
 
+    private static void probabilityCalculator(Scanner scanner) {
+        scanner.nextLine();
+        System.out.print("Expression: ");
+
+        String input = scanner.nextLine();
+
+        Tokenizer tokenizer = new Tokenizer(input);
+
+        ExpressionParser parser =
+                new ExpressionParser(tokenizer.tokenize());
+
+        DiceExpression expression = parser.parse();
+
+        double probability =
+                ExpressionEvaluator.evaluate(expression);
+
+        System.out.printf(
+                "Chance: %.4f%%%n",
+                probability * 100);
+    }
 
     // Binomial Probability
     private static double binomialProbability(int dice, int successes) {
