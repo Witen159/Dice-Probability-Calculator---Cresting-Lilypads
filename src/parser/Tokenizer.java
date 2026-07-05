@@ -115,6 +115,21 @@ public class Tokenizer {
 
                     break;
 
+                case '(':
+                    tokens.add(new Token(TokenType.LEFT_PAREN, "("));
+                    pos++;
+                    break;
+
+                case ')':
+                    tokens.add(new Token(TokenType.RIGHT_PAREN, ")"));
+                    pos++;
+                    break;
+
+                case '*':
+                    tokens.add(new Token(TokenType.STAR, "*"));
+                    pos++;
+                    break;
+
                 default:
                     throw new RuntimeException(
                             "Unexpected character: " + c

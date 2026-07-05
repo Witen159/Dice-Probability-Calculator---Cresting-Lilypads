@@ -6,6 +6,7 @@ public enum TokenType {
 
     PLUS,
     MINUS,
+    STAR,
 
     GREATER,
     GREATER_EQUAL,
@@ -14,6 +15,9 @@ public enum TokenType {
 
     EQUAL,
     NOT_EQUAL,
+
+    LEFT_PAREN,
+    RIGHT_PAREN,
 
     EOF
 }
