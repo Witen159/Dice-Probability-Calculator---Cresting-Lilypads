@@ -31,7 +31,7 @@ class ProbabilityCalculator extends Calculator {
 
         <br><br>
 
-        Parser coming soon.
+        You'll have to wait until I can rewrite everything for JS...
     `;
 
     }
