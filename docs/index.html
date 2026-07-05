@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cresting Lilypads - Dice Probability Calculator</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="app">
+
+    <aside id="sidebar">
+
+        <h1>Cresting Lilypads</h1>
+        <h2>Dice Probability Calculator</h2>
+
+        <button class="nav-button active" data-mode="uncontested">
+            Uncontested Roll
+        </button>
+
+        <button class="nav-button" data-mode="clash">
+            Clash Roll
+        </button>
+
+        <button class="nav-button" data-mode="comparison">
+            Success Comparison
+        </button>
+
+        <button class="nav-button" data-mode="percentile">
+            Total Percentile
+        </button>
+
+        <button class="nav-button" data-mode="distribution">
+            Success Distribution
+        </button>
+
+        <button class="nav-button" data-mode="probability">
+            Probability Calculator
+        </button>
+
+    </aside>
+
+    <main id="content">
+
+        <section class="card">
+
+            <h2 id="calculator-title">
+                Uncontested Roll
+            </h2>
+
+            <div id="calculator-inputs">
+
+            </div>
+
+            <button id="calculate-button">
+                Calculate
+            </button>
+
+        </section>
+
+        <section class="card">
+
+            <h2>
+                Results
+            </h2>
+
+            <div id="results">
+
+                Select a calculator and press Calculate.
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+<script src="js/views/calculator.js"></script>
+
+<script src="js/util/dom.js"></script>
+
+<script src="js/engine/probability.js"></script>
+<script src="js/engine/uncontested.js"></script>
+<script src="js/engine/comparison.js"></script>
+<script src="js/engine/clash.js"></script>
+<script src="js/engine/distribution.js"></script>
+<script src="js/engine/percentile.js"></script>
+
+<script src="js/views/uncontested.js"></script>
+<script src="js/views/clash.js"></script>
+<script src="js/views/comparison.js"></script>
+<script src="js/views/percentile.js"></script>
+<script src="js/views/distribution.js"></script>
+<script src="js/views/probability.js"></script>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
