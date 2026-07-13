@@ -28,7 +28,8 @@ class DistributionCalculator extends Calculator {
 
         let html = `
         <table>
-
+            <canvas id="distributionChart"></canvas>
+            <br>
             <tr>
                 <th>Successes</th>
                 <th>Chance</th>
@@ -50,6 +51,7 @@ class DistributionCalculator extends Calculator {
 
         results.innerHTML = html;
 
+        drawDistributionChart(distribution);
     }
 
 }
